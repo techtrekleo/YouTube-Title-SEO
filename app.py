@@ -1,6 +1,10 @@
 import os
+import logging
 import google.generativeai as genai
 from flask import Flask, request, jsonify, send_from_directory
+
+# Configure basic logging
+logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(levelname)s - %(message)s')
 
 app = Flask(__name__)
 
@@ -8,7 +12,7 @@ app = Flask(__name__)
 try:
     genai.configure(api_key=os.environ["GEMINI_API_KEY"])
 except KeyError:
-    print("Warning: GEMINI_API_KEY environment variable not set. The application will not work without it.")
+    logging.warning("GEMINI_API_KEY environment variable not set. The application will not work without it.")
     pass
 
 # Initialize the Gemini model
@@ -20,10 +24,8 @@ def serve_index():
 
 @app.route('/<path:path>')
 def serve_static(path):
-    # Serve static files like script.js, style.css
     if path in ['script.js', 'style.css']:
         return send_from_directory('.', path)
-    # For any other path, it might be a 404 or you can redirect to index
     return send_from_directory('.', 'index.html')
 
 
@@ -41,7 +43,6 @@ def generate_seo_content():
         return jsonify({"error": "Missing required fields"}), 400
 
     try:
-        # Create the prompt for the AI
         prompt = f"""
         Generate a YouTube video title and keyword tags for a music cover.
 
@@ -62,19 +63,15 @@ def generate_seo_content():
           "tags": "tag1, tag2, tag3, ..."
         }}
         """
-
         response = model.generate_content(prompt)
-
-        # Clean up the response from Gemini, which might include markdown backticks
         clean_response = response.text.strip().replace("```json", "").replace("```", "")
-
         return clean_response, 200, {'Content-Type': 'application/json'}
 
     except Exception as e:
-        print(f"An error occurred: {e}")
+        # Use logging to ensure the error is captured by Gunicorn/Railway
+        logging.error(f"Failed to generate content from AI service.", exc_info=True)
         return jsonify({"error": "Failed to generate content from AI service."}), 500
 
 if __name__ == '__main__':
-    # This block is for local development. Gunicorn will be used in production via the Procfile.
     port = int(os.environ.get('PORT', 5001))
     app.run(host='0.0.0.0', port=port)
