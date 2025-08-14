@@ -10,7 +10,7 @@ This project is a web application that helps music cover creators generate SEO-f
 -   One-click copy for both title and tags.
 
 ## How to Use
-
+ 
 ### 1. Prerequisites
 
 -   Python 3.6+
