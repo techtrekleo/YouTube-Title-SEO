@@ -75,12 +75,13 @@ def generate_seo_content():
         return jsonify(response_data)
 
     except json.JSONDecodeError as e:
-        logging.error(f"Failed to parse JSON from AI response: {clean_response_text}", exc_info=True)
-        return jsonify({"error": "Failed to parse response from AI service."}), 500
+        error_message = f"AI response could not be decoded. Details: {e}. Response text: {clean_response_text}"
+        logging.error(error_message, exc_info=True)
+        return jsonify({"error": error_message}), 500
     except Exception as e:
-        # Use logging to ensure the error is captured by Gunicorn/Railway
-        logging.error(f"Failed to generate content from AI service.", exc_info=True)
-        return jsonify({"error": "Failed to generate content from AI service."}), 500
+        error_message = f"An error occurred with the AI service: {str(e)}"
+        logging.error(error_message, exc_info=True)
+        return jsonify({"error": error_message}), 500
 
 if __name__ == '__main__':
     port = int(os.environ.get('PORT', 5001))
