@@ -19,7 +19,7 @@ except KeyError:
 # Initialize the Gemini model
 # Use 'gemini-1.0-pro' as 'gemini-pro' can be ambiguous and might refer to
 # a model not available in the v1beta API version.
-model = genai.GenerativeModel('gemini-1.0-pro')
+model = genai.GenerativeModel('gemini-2.5-flash')
 
 @app.route('/')
 def serve_index():
