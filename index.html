@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YouTube SEO Generator</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>YouTube SEO Generator</h1>
+        <p>Generate SEO-friendly titles and tags for your music covers.</p>
+
+        <form id="seo-form">
+            <div class="form-group">
+                <label for="song-name">Song Name:</label>
+                <input type="text" id="song-name" required>
+            </div>
+
+            <div class="form-group">
+                <label for="original-artist">Original Artist:</label>
+                <input type="text" id="original-artist" required>
+            </div>
+
+            <div class="form-group">
+                <label>Music Style:</label>
+                <div class="style-checkboxes">
+                    <label><input type="checkbox" name="style" value="Pop"> Pop</label>
+                    <label><input type="checkbox" name="style" value="Rock"> Rock</label>
+                    <label><input type="checkbox" name="style" value="Lofi"> Lofi</label>
+                    <label><input type="checkbox" name="style" value="Acoustic"> Acoustic</label>
+                    <label><input type="checkbox" name="style" value="Instrumental"> Instrumental</label>
+                    <label><input type="checkbox" name="style" value="R&B"> R&B</label>
+                    <label><input type="checkbox" name="style" value="Hip Hop"> Hip Hop</label>
+                    <label><input type="checkbox" name="style" value="Electronic"> Electronic</label>
+                </div>
+            </div>
+
+            <button type="submit" id="generate-btn">Generate</button>
+        </form>
+
+        <div id="results" class="hidden">
+            <h2>Generated SEO Content</h2>
+            <div class="result-item">
+                <h3>Title</h3>
+                <div class="output-box" id="title-output"></div>
+                <button class="copy-btn" data-clipboard-target="#title-output">Copy Title</button>
+            </div>
+            <div class="result-item">
+                <h3>Tags</h3>
+                <div class="output-box" id="tags-output"></div>
+                <button class="copy-btn" data-clipboard-target="#tags-output">Copy Tags</button>
+            </div>
+        </div>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
