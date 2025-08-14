@@ -1,5 +1,6 @@
 import os
 import logging
+import json
 import google.generativeai as genai
 from flask import Flask, request, jsonify, send_from_directory
 
@@ -64,9 +65,18 @@ def generate_seo_content():
         }}
         """
         response = model.generate_content(prompt)
-        clean_response = response.text.strip().replace("```json", "").replace("```", "")
-        return clean_response, 200, {'Content-Type': 'application/json'}
+        # Clean up the response to ensure it's valid JSON
+        clean_response_text = response.text.strip().replace("```json", "").replace("```", "").strip()
 
+        # Parse the JSON string into a Python dictionary
+        response_data = json.loads(clean_response_text)
+
+        # Return the data as a proper JSON response
+        return jsonify(response_data)
+
+    except json.JSONDecodeError as e:
+        logging.error(f"Failed to parse JSON from AI response: {clean_response_text}", exc_info=True)
+        return jsonify({"error": "Failed to parse response from AI service."}), 500
     except Exception as e:
         # Use logging to ensure the error is captured by Gunicorn/Railway
         logging.error(f"Failed to generate content from AI service.", exc_info=True)
