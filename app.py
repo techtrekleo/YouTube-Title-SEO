@@ -1,22 +1,31 @@
 import os
 import google.generativeai as genai
-from flask import Flask, request, jsonify
-from flask_cors import CORS
+from flask import Flask, request, jsonify, send_from_directory
 
 app = Flask(__name__)
-CORS(app)
 
 # Configure the Gemini API key
 try:
     genai.configure(api_key=os.environ["GEMINI_API_KEY"])
 except KeyError:
-    # This is a fallback for local development if the key is not set.
-    # The user will be instructed to set this environment variable.
-    print("Warning: GEMINI_API_KEY environment variable not set.")
+    print("Warning: GEMINI_API_KEY environment variable not set. The application will not work without it.")
     pass
 
 # Initialize the Gemini model
 model = genai.GenerativeModel('gemini-pro')
+
+@app.route('/')
+def serve_index():
+    return send_from_directory('.', 'index.html')
+
+@app.route('/<path:path>')
+def serve_static(path):
+    # Serve static files like script.js, style.css
+    if path in ['script.js', 'style.css']:
+        return send_from_directory('.', path)
+    # For any other path, it might be a 404 or you can redirect to index
+    return send_from_directory('.', 'index.html')
+
 
 @app.route('/generate', methods=['POST'])
 def generate_seo_content():
@@ -63,8 +72,9 @@ def generate_seo_content():
 
     except Exception as e:
         print(f"An error occurred: {e}")
-        # In case of an API error, return a more generic error to the user.
         return jsonify({"error": "Failed to generate content from AI service."}), 500
 
 if __name__ == '__main__':
-    app.run(debug=True, port=5001)
+    # This block is for local development. Gunicorn will be used in production via the Procfile.
+    port = int(os.environ.get('PORT', 5001))
+    app.run(host='0.0.0.0', port=port)
