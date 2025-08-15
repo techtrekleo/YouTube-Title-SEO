@@ -25,14 +25,15 @@
             <div class="form-group">
                 <label>Music Style:</label>
                 <div class="style-checkboxes">
-                    <label><input type="checkbox" name="style" value="Pop"> Pop</label>
-                    <label><input type="checkbox" name="style" value="Rock"> Rock</label>
+                    <label><input type="checkbox" name="style" value="Pop"> Pop (流行)</label>
+                    <label><input type="checkbox" name="style" value="Rock"> Rock (搖滾)</label>
                     <label><input type="checkbox" name="style" value="Lofi"> Lofi</label>
-                    <label><input type="checkbox" name="style" value="Acoustic"> Acoustic</label>
-                    <label><input type="checkbox" name="style" value="Instrumental"> Instrumental</label>
-                    <label><input type="checkbox" name="style" value="R&B"> R&B</label>
-                    <label><input type="checkbox" name="style" value="Hip Hop"> Hip Hop</label>
-                    <label><input type="checkbox" name="style" value="Electronic"> Electronic</label>
+                    <label><input type="checkbox" name="style" value="Acoustic"> Acoustic (原聲)</label>
+                    <label><input type="checkbox" name="style" value="Instrumental"> Instrumental (演奏)</label>
+                    <label><input type="checkbox" name="style" value="R&B"> R&B (節奏藍調)</label>
+                    <label><input type="checkbox" name="style" value="Hip Hop"> Hip Hop (嘻哈)</label>
+                    <label><input type="checkbox" name="style" value="Electronic"> Electronic (電子)</label>
+                    <label><input type="checkbox" name="style" value="HIFI"> HIFI (高保真)</label>
                 </div>
             </div>
 
@@ -42,12 +43,17 @@
         <div id="results" class="hidden">
             <h2>Generated SEO Content</h2>
             <div class="result-item">
-                <h3>Title</h3>
+                <h3>Title (標題)</h3>
                 <div class="output-box" id="title-output"></div>
                 <button class="copy-btn" data-clipboard-target="#title-output">Copy Title</button>
             </div>
             <div class="result-item">
-                <h3>Tags</h3>
+                <h3>Description (歌曲說明)</h3>
+                <div class="output-box" id="description-output"></div>
+                <button class="copy-btn" data-clipboard-target="#description-output">Copy Description</button>
+            </div>
+            <div class="result-item">
+                <h3>Tags (標籤)</h3>
                 <div class="output-box" id="tags-output"></div>
                 <button class="copy-btn" data-clipboard-target="#tags-output">Copy Tags</button>
             </div>

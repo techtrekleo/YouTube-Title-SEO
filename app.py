@@ -47,11 +47,12 @@ def generate_seo_content():
 
     try:
         prompt = f"""
-        Generate a YouTube video title and keyword tags for a music cover.
+        Generate a YouTube video title, description, and keyword tags for a music cover.
 
         **Instructions:**
         1.  **Title:** Create a descriptive and SEO-friendly title between 30 and 100 characters.
-        2.  **Tags:** Generate a list of 50 to 80 relevant keyword tags, including both Chinese and English. The tags should be a single comma-separated string.
+        2.  **Description:** Create an SEO-friendly and engaging description between 100 and 300 characters.
+        3.  **Tags:** Generate a list of 50 to 80 relevant keyword tags, including both Chinese and English. The tags should be a single comma-separated string.
 
         **Video Details:**
         *   **Song Name:** {song_name}
@@ -59,10 +60,11 @@ def generate_seo_content():
         *   **Cover Style(s):** {', '.join(styles)}
 
         **Output Format:**
-        Return a JSON object with two keys: "title" and "tags".
+        Return a JSON object with three keys: "title", "description", and "tags".
         Example:
         {{
           "title": "Your Generated Title Here",
+          "description": "Your generated description here, between 100 and 300 characters.",
           "tags": "tag1, tag2, tag3, ..."
         }}
         """

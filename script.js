@@ -3,6 +3,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const generateBtn = document.getElementById('generate-btn');
     const resultsDiv = document.getElementById('results');
     const titleOutput = document.getElementById('title-output');
+    const descriptionOutput = document.getElementById('description-output');
     const tagsOutput = document.getElementById('tags-output');
     const copyBtns = document.querySelectorAll('.copy-btn');
 
@@ -42,6 +43,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const data = await response.json();
 
             titleOutput.textContent = data.title;
+            descriptionOutput.textContent = data.description;
             tagsOutput.textContent = data.tags;
             resultsDiv.classList.remove('hidden');
 
@@ -62,7 +64,14 @@ document.addEventListener('DOMContentLoaded', () => {
                 navigator.clipboard.writeText(targetElement.textContent).then(() => {
                     btn.textContent = 'Copied!';
                     setTimeout(() => {
-                        const buttonText = targetId.includes('title') ? 'Copy Title' : 'Copy Tags';
+                        let buttonText = 'Copy';
+                        if (targetId.includes('title')) {
+                            buttonText = 'Copy Title';
+                        } else if (targetId.includes('description')) {
+                            buttonText = 'Copy Description';
+                        } else if (targetId.includes('tags')) {
+                            buttonText = 'Copy Tags';
+                        }
                         btn.textContent = buttonText;
                     }, 2000);
                 }).catch(err => {
