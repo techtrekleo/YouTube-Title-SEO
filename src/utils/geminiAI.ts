@@ -155,13 +155,16 @@ export const generateAITags = async (songName: string, artist: string, musicStyl
 - 原唱：${artist}
 - 音樂風格：${musicStyles.join(', ')}
 
-請生成 15-20 個相關標籤，要求：
-1. 包含歌名相關標籤
-2. 包含歌手相關標籤
-3. 包含音樂風格標籤
-4. 包含情感和場景標籤
-5. 總字數在 300-500 字之間
-6. 用逗號分隔
+請生成 25-35 個相關標籤，要求：
+1. 包含歌名相關標籤（中英文）
+2. 包含歌手相關標籤（中英文）
+3. 包含音樂風格標籤（中英文）
+4. 包含情感和場景標籤（中英文）
+5. 包含音樂類型標籤（中英文）
+6. 包含聆聽場景標籤（中英文）
+7. 總字數在 400-600 字之間
+8. 用逗號分隔
+9. 中英文標籤都要有，比例約 60% 中文，40% 英文
 
 請只回傳標籤列表，不要其他文字。`
 
@@ -172,17 +175,45 @@ export const generateAITags = async (songName: string, artist: string, musicStyl
     
     // 解析標籤
     const tags = tagsText.split(',').map(tag => tag.trim()).filter(tag => tag.length > 0)
-    const finalTags = tags.slice(0, 20) // 限制最多20個標籤
+    const finalTags = tags.slice(0, 35) // 限制最多35個標籤
     console.log('✅ AI tags generated:', finalTags.length, 'tags')
     return finalTags
   } catch (error: any) {
     console.error('❌ AI 標籤生成錯誤:', error)
     console.error('❌ Error details:', error.message)
-    // 回退到預設標籤
+    // 回退到預設標籤 - 增加更多中英文標籤
     const fallbackTags = [
-      songName, `${songName} music`, `${songName} instrumental`, `${songName} cover`,
-      artist, `${artist} music`, `${artist} songs`, `${artist} covers`,
-      ...musicStyles, `${musicStyles[0]} music`, 'music', 'instrumental', 'cover', 'vocal'
+      // 歌名相關
+      songName, `${songName} music`, `${songName} 音樂`, `${songName} instrumental`, `${songName} 演奏版`,
+      `${songName} cover`, `${songName} 翻唱`, `${songName} 純音樂`, `${songName} 背景音樂`,
+      
+      // 歌手相關
+      artist, `${artist} music`, `${artist} 音樂`, `${artist} songs`, `${artist} 歌曲`,
+      `${artist} covers`, `${artist} 翻唱`, `${artist} 原唱`, `${artist} 演唱`,
+      
+      // 音樂風格相關
+      ...musicStyles, `${musicStyles[0]} music`, `${musicStyles[0]} 音樂`, `${musicStyles[0]} 風格`,
+      `${musicStyles[0]} instrumental`, `${musicStyles[0]} 演奏`, `${musicStyles[0]} 純音樂`,
+      
+      // 通用音樂標籤
+      'music', '音樂', 'instrumental', '演奏', 'cover', '翻唱', 'vocal', '人聲',
+      'background music', '背景音樂', 'relaxing music', '放鬆音樂', 'chill music', '輕鬆音樂',
+      'study music', '學習音樂', 'work music', '工作音樂', 'sleep music', '睡眠音樂',
+      
+      // 情感和場景標籤
+      'emotional', '情感', 'romantic', '浪漫', 'peaceful', '平靜', 'calm', '寧靜',
+      'beautiful', '美麗', 'amazing', '驚艷', 'perfect', '完美', 'wonderful', '美妙',
+      'relaxing', '放鬆', 'chill', '輕鬆', 'soothing', '舒緩', 'healing', '療癒',
+      
+      // 聆聽場景
+      'study', '學習', 'work', '工作', 'sleep', '睡眠', 'meditation', '冥想',
+      'reading', '閱讀', 'cafe', '咖啡廳', 'night', '夜晚', 'morning', '早晨',
+      'afternoon', '下午', 'evening', '傍晚', 'weekend', '週末', 'daily', '日常',
+      
+      // 音樂類型
+      'acoustic', '原聲', 'piano', '鋼琴', 'guitar', '吉他', 'violin', '小提琴',
+      'orchestra', '管弦樂', 'symphony', '交響樂', 'classical', '古典', 'modern', '現代',
+      'contemporary', '當代', 'ambient', '環境音樂', 'atmospheric', '氛圍音樂'
     ]
     console.log('🔄 Using fallback tags:', fallbackTags.length, 'tags')
     return fallbackTags
