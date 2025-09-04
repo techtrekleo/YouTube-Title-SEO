@@ -20,7 +20,7 @@ export const generateAITitle = async (songName: string, artist: string, musicSty
       throw new Error('Invalid API key - please check your GEMINI_API_KEY setting')
     }
     
-    const model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash-exp' })
+    const model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash' })
     
     const prompt = `請為以下音樂生成一個 YouTube 標題，格式為：【歌名】- 歌手名 🖤 描述｜音樂風格 / 情感描述 / 場景描述
 
@@ -73,7 +73,7 @@ export const generateAIDescription = async (songName: string, artist: string, mu
       throw new Error('Invalid API key - please check your GEMINI_API_KEY setting')
     }
     
-    const model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash-exp' })
+    const model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash' })
     
     const prompt = `請為以下音樂生成一個 YouTube 影片說明：
 
@@ -146,7 +146,7 @@ export const generateAITags = async (songName: string, artist: string, musicStyl
       throw new Error('Invalid API key - please check your GEMINI_API_KEY setting')
     }
     
-    const model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash-exp' })
+    const model = genAI.getGenerativeModel({ model: 'gemini-2.0-flash' })
     
     const prompt = `請為以下音樂生成 YouTube 標籤：
 
