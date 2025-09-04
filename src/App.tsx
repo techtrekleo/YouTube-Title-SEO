@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { musicCategories, getMusicCategory } from './utils/musicCategories'
-import { generateYouTubeTemplate } from './utils/youtubeTemplate'
+import { generateAIContent } from './utils/geminiAI'
 
 interface SEOContent {
   title: string
@@ -14,6 +14,7 @@ function App() {
   const [selectedStyles, setSelectedStyles] = useState<string[]>([])
   const [seoContent, setSeoContent] = useState<SEOContent | null>(null)
   const [isGenerating, setIsGenerating] = useState(false)
+  const [error, setError] = useState<string | null>(null)
 
   const toggleStyle = (styleId: string) => {
     setSelectedStyles(prev => 
@@ -27,30 +28,23 @@ function App() {
     if (!songName.trim() || selectedStyles.length === 0) return
 
     setIsGenerating(true)
+    setError(null)
     
-    setTimeout(() => {
-      const primaryStyle = selectedStyles[0]
-      const musicCategory = getMusicCategory(primaryStyle)
-      if (!musicCategory) return
-
-      const template = generateYouTubeTemplate({
-        musicCategory: primaryStyle,
-        topic: songName,
-        artist: artist || undefined,
-        activity: undefined,
-        mood: undefined,
-        year: undefined,
-        language: undefined,
-        additionalStyles: selectedStyles.slice(1)
-      })
-
+    try {
+      const artistName = artist || 'Unknown Artist'
+      const result = await generateAIContent(songName, artistName, selectedStyles)
+      
       setSeoContent({
-        title: template.title,
-        description: template.description,
-        tags: template.tags
+        title: result.title,
+        description: result.description,
+        tags: result.tags
       })
+    } catch (err) {
+      console.error('生成失敗:', err)
+      setError('AI 生成失敗，請檢查 API 金鑰或稍後再試')
+    } finally {
       setIsGenerating(false)
-    }, 2000)
+    }
   }
 
   const copyToClipboard = (text: string) => {
@@ -148,8 +142,14 @@ function App() {
                 disabled={!songName.trim() || selectedStyles.length === 0 || isGenerating}
                 className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-4 rounded-lg transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                {isGenerating ? '🤖 AI is generating...' : 'Generate'}
+                {isGenerating ? '🤖 AI is generating...' : 'Generate with AI'}
               </button>
+
+              {error && (
+                <div className="bg-red-50 border border-red-200 rounded-lg p-4">
+                  <p className="text-red-800 text-sm">{error}</p>
+                </div>
+              )}
             </div>
           </div>
 
