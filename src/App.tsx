@@ -6,7 +6,6 @@ interface SEOContent {
   title: string
   description: string
   tags: string[]
-  score: number
 }
 
 function App() {
@@ -48,8 +47,7 @@ function App() {
       setSeoContent({
         title: template.title,
         description: template.description,
-        tags: template.tags,
-        score: template.score
+        tags: template.tags
       })
       setIsGenerating(false)
     }, 2000)
@@ -57,12 +55,6 @@ function App() {
 
   const copyToClipboard = (text: string) => {
     navigator.clipboard.writeText(text)
-  }
-
-  const getScoreColor = (score: number) => {
-    if (score >= 85) return 'text-green-600'
-    if (score >= 75) return 'text-yellow-600'
-    return 'text-red-600'
   }
 
   return (
@@ -163,25 +155,6 @@ function App() {
 
           {seoContent && (
             <div className="space-y-6">
-              <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-                <div className="flex items-center justify-between">
-                  <h3 className="text-lg font-semibold text-gray-900">SEO Score</h3>
-                  <span className={`text-3xl font-bold ${getScoreColor(seoContent.score)}`}>
-                    {seoContent.score}/100
-                  </span>
-                </div>
-                <div className="w-full bg-gray-200 rounded-full h-3 mt-2">
-                  <div 
-                    className="bg-blue-600 h-3 rounded-full transition-all duration-500"
-                    style={{ width: `${seoContent.score}%` }}
-                  ></div>
-                </div>
-                <p className="text-sm text-gray-600 mt-2">
-                  {seoContent.score >= 85 ? 'Excellent SEO optimization' : 
-                   seoContent.score >= 75 ? 'Good SEO potential' : 'Needs improvement'}
-                </p>
-              </div>
-
               <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
                 <div className="flex items-center justify-between mb-4">
                   <h3 className="text-lg font-semibold text-gray-900">Title (標題)</h3>
