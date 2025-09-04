@@ -322,3 +322,4 @@ export const generateYouTubeTemplate = (data: MusicTemplateData): YouTubeTemplat
     score: Math.floor(Math.random() * 20) + 80
   }
 }
+

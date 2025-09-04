@@ -180,3 +180,4 @@ youtube-title-seo/
 ## 📄 授權
 
 MIT License - 詳見 LICENSE 檔案
+
