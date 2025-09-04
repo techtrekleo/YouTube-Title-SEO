@@ -131,7 +131,6 @@ This project is licensed under the MIT License - see the [LICENSE](LICENSE) file
 **音樂脈動-Sonic Pulse**
 
 - YouTube Channel: [🎵 音樂脈動-Sonic Pulse](https://www.youtube.com/@%E9%9F%B3%E6%A8%82%E8%84%88%E5%8B%95SonicPulse)
-- GitHub: [techtrekleo](https://github.com/techtrekleo)
 
 ## 🙏 Acknowledgments
 
