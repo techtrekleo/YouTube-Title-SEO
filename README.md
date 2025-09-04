@@ -7,6 +7,8 @@ A powerful tool for optimizing YouTube video titles to improve search engine vis
 - **Title Analysis**: Analyze existing YouTube titles for SEO potential
 - **Keyword Research**: Find trending keywords and search terms
 - **Title Generator**: Generate optimized titles based on content and keywords
+- **Music Categories**: Specialized support for Chill, Bossa Nova, Bolero, Yandere, and more
+- **YouTube Template Generator**: Complete upload templates with title, description, and tags
 - **Competitor Analysis**: Analyze competitor titles for insights
 - **Performance Tracking**: Track title performance over time
 
@@ -57,6 +59,17 @@ youtube-title-seo/
 4. **Analyze competitors**: See what titles are working in your niche
 5. **Track performance**: Monitor how your titles perform over time
 
+## Music Categories Supported
+
+- **Chill**: Relaxing music for studying, sleeping, meditation
+- **Bossa Nova**: Brazilian jazz with smooth Latin vibes
+- **Bolero**: Romantic Latin dance music
+- **病嬌 (Yandere)**: Dramatic anime-style music
+- **Jazz**: Classic swing and bebop
+- **Classical**: Orchestral masterpieces
+- **Electronic**: EDM and techno beats
+- **Pop**: Chart-topping hits
+
 ## Contributing
 
 1. Fork the repository
@@ -73,3 +86,13 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 - **techtrekleo** - *Initial work* - [GitHub](https://github.com/techtrekleo)
 
+## Deployment
+
+This project is automatically deployed on Railway. Any changes pushed to the main branch will trigger a new deployment.
+
+## Latest Update
+
+- Added comprehensive YouTube template generator
+- Enhanced music category support
+- Improved SEO optimization features
+- Updated UI/UX for better user experience
