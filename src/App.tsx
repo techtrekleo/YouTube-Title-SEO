@@ -68,7 +68,7 @@ function App() {
               </h1>
             </div>
             <div className="flex items-center space-x-4">
-              <span className="text-sm text-gray-500">by techtrekleo</span>
+              <span className="text-sm text-gray-500">by 音樂脈動-Sonic Pulse</span>
             </div>
           </div>
         </div>
@@ -254,7 +254,17 @@ function App() {
       <footer className="bg-white border-t border-gray-200 mt-16">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="text-center text-gray-500 text-sm">
-            <p>© 2024 YouTube SEO Generator. Built with ❤️ by techtrekleo</p>
+            <p>© 2024 YouTube SEO Generator. Built with ❤️ by 音樂脈動-Sonic Pulse</p>
+            <p className="mt-2">
+              <a 
+                href="https://www.youtube.com/@%E9%9F%B3%E6%A8%82%E8%84%88%E5%8B%95SonicPulse" 
+                target="_blank" 
+                rel="noopener noreferrer"
+                className="text-blue-600 hover:text-blue-700"
+              >
+                🎵 音樂脈動-Sonic Pulse YouTube Channel
+              </a>
+            </p>
             <p className="mt-2">
               <a 
                 href="https://github.com/techtrekleo/YouTube-Title-SEO" 
