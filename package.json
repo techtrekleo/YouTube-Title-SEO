@@ -2,6 +2,7 @@
   "name": "youtube-title-seo",
   "version": "1.0.0",
   "description": "YouTube Title SEO Optimization Tool",
+  "type": "module",
   "main": "index.js",
   "scripts": {
     "dev": "vite",
