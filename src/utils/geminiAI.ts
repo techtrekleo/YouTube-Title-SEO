@@ -1,7 +1,7 @@
 import { GoogleGenerativeAI } from '@google/generative-ai'
 
 // 初始化 Gemini AI - 支援 Vite 和 Node.js 環境
-const apiKey = (import.meta as any).env?.VITE_GEMINI_API_KEY || (typeof process !== 'undefined' ? process.env?.GEMINI_API_KEY : '') || ''
+const apiKey = (import.meta as any).env?.VITE_GEMINI_API_KEY || (typeof process !== 'undefined' ? process.env?.GEMINI_API_KEY : '') || 'AIzaSyDBvpNXzZQR980TLv7NtQRb6OARBe_VUCs'
 console.log('🔑 Gemini API Key available:', !!apiKey, 'Length:', apiKey.length)
 
 const genAI = new GoogleGenerativeAI(apiKey)
@@ -11,7 +11,13 @@ export const generateAITitle = async (songName: string, artist: string, musicSty
   console.log('🤖 Starting AI title generation...')
   try {
     if (!apiKey) {
-      throw new Error('No API key available')
+      console.error('❌ No API key available - please set GEMINI_API_KEY environment variable')
+      throw new Error('No API key available - please set GEMINI_API_KEY environment variable')
+    }
+    
+    if (apiKey === 'your_gemini_api_key_here' || apiKey.length < 10) {
+      console.error('❌ Invalid API key - please check your GEMINI_API_KEY setting')
+      throw new Error('Invalid API key - please check your GEMINI_API_KEY setting')
     }
     
     const model = genAI.getGenerativeModel({ model: 'gemini-pro' })
@@ -43,8 +49,9 @@ export const generateAITitle = async (songName: string, artist: string, musicSty
     const title = response.text().trim()
     console.log('✅ AI title generated:', title)
     return title
-  } catch (error) {
+  } catch (error: any) {
     console.error('❌ AI 標題生成錯誤:', error)
+    console.error('❌ Error details:', error.message)
     // 回退到預設模板
     const fallbackTitle = `【${songName}】- ${artist} 🖤 ${songName} 的音樂世界｜${musicStyles[0]} / Amazing / 音樂欣賞`
     console.log('🔄 Using fallback title:', fallbackTitle)
@@ -57,7 +64,13 @@ export const generateAIDescription = async (songName: string, artist: string, mu
   console.log('🤖 Starting AI description generation...')
   try {
     if (!apiKey) {
-      throw new Error('No API key available')
+      console.error('❌ No API key available - please set GEMINI_API_KEY environment variable')
+      throw new Error('No API key available - please set GEMINI_API_KEY environment variable')
+    }
+    
+    if (apiKey === 'your_gemini_api_key_here' || apiKey.length < 10) {
+      console.error('❌ Invalid API key - please check your GEMINI_API_KEY setting')
+      throw new Error('Invalid API key - please check your GEMINI_API_KEY setting')
     }
     
     const model = genAI.getGenerativeModel({ model: 'gemini-pro' })
@@ -91,8 +104,9 @@ export const generateAIDescription = async (songName: string, artist: string, mu
     const description = response.text().trim()
     console.log('✅ AI description generated (length:', description.length, ')')
     return description
-  } catch (error) {
+  } catch (error: any) {
     console.error('❌ AI 說明生成錯誤:', error)
+    console.error('❌ Error details:', error.message)
     // 回退到預設模板
     const fallbackDescription = `🎵 ${musicStyles[0]} ${songName} music perfect for listening.
 
@@ -123,7 +137,13 @@ export const generateAITags = async (songName: string, artist: string, musicStyl
   console.log('🤖 Starting AI tags generation...')
   try {
     if (!apiKey) {
-      throw new Error('No API key available')
+      console.error('❌ No API key available - please set GEMINI_API_KEY environment variable')
+      throw new Error('No API key available - please set GEMINI_API_KEY environment variable')
+    }
+    
+    if (apiKey === 'your_gemini_api_key_here' || apiKey.length < 10) {
+      console.error('❌ Invalid API key - please check your GEMINI_API_KEY setting')
+      throw new Error('Invalid API key - please check your GEMINI_API_KEY setting')
     }
     
     const model = genAI.getGenerativeModel({ model: 'gemini-pro' })
@@ -155,8 +175,9 @@ export const generateAITags = async (songName: string, artist: string, musicStyl
     const finalTags = tags.slice(0, 20) // 限制最多20個標籤
     console.log('✅ AI tags generated:', finalTags.length, 'tags')
     return finalTags
-  } catch (error) {
+  } catch (error: any) {
     console.error('❌ AI 標籤生成錯誤:', error)
+    console.error('❌ Error details:', error.message)
     // 回退到預設標籤
     const fallbackTags = [
       songName, `${songName} music`, `${songName} instrumental`, `${songName} cover`,
@@ -186,7 +207,7 @@ export const generateAIContent = async (songName: string, artist: string, musicS
       category: '10', // Music category
       score: Math.floor(Math.random() * 20) + 80
     }
-  } catch (error) {
+  } catch (error: any) {
     console.error('❌ AI 內容生成錯誤:', error)
     throw error
   }
