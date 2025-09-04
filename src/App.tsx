@@ -1,34 +1,70 @@
 import React, { useState } from 'react'
-import TitleAnalyzer from './components/TitleAnalyzer'
-import KeywordResearch from './components/KeywordResearch'
-import TitleGenerator from './components/TitleGenerator'
-import CompetitorAnalysis from './components/CompetitorAnalysis'
-import MusicTitleGenerator from './components/MusicTitleGenerator'
-import YouTubeTemplateGenerator from './components/YouTubeTemplateGenerator'
+import { musicCategories, getMusicCategory } from './utils/musicCategories'
+import { generateYouTubeTemplate } from './utils/youtubeTemplate'
+
+interface SEOContent {
+  title: string
+  description: string
+  tags: string[]
+  score: number
+}
 
 function App() {
-  const [activeTab, setActiveTab] = useState('analyzer')
+  const [songName, setSongName] = useState('')
+  const [artist, setArtist] = useState('')
+  const [selectedStyle, setSelectedStyle] = useState('')
+  const [seoContent, setSeoContent] = useState<SEOContent | null>(null)
+  const [isGenerating, setIsGenerating] = useState(false)
 
-  const tabs = [
-    { id: 'analyzer', name: 'Title Analyzer', component: TitleAnalyzer },
-    { id: 'keywords', name: 'Keyword Research', component: KeywordResearch },
-    { id: 'generator', name: 'Title Generator', component: TitleGenerator },
-    { id: 'music', name: '🎵 Music Titles', component: MusicTitleGenerator },
-    { id: 'template', name: '🎬 YouTube Template', component: YouTubeTemplateGenerator },
-    { id: 'competitor', name: 'Competitor Analysis', component: CompetitorAnalysis },
-  ]
+  const generateSEO = async () => {
+    if (!songName.trim() || !selectedStyle) return
 
-  const ActiveComponent = tabs.find(tab => tab.id === activeTab)?.component || TitleAnalyzer
+    setIsGenerating(true)
+    
+    // Simulate AI processing
+    setTimeout(() => {
+      const musicCategory = getMusicCategory(selectedStyle)
+      if (!musicCategory) return
+
+      const template = generateYouTubeTemplate({
+        musicCategory: selectedStyle,
+        topic: songName,
+        artist: artist || undefined,
+        activity: undefined,
+        mood: undefined,
+        year: undefined,
+        language: undefined
+      })
+
+      setSeoContent({
+        title: template.title,
+        description: template.description,
+        tags: template.tags,
+        score: template.score
+      })
+      setIsGenerating(false)
+    }, 2000)
+  }
+
+  const copyToClipboard = (text: string) => {
+    navigator.clipboard.writeText(text)
+  }
+
+  const getScoreColor = (score: number) => {
+    if (score >= 85) return 'text-green-600'
+    if (score >= 75) return 'text-yellow-600'
+    return 'text-red-600'
+  }
 
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
       <header className="bg-white shadow-sm border-b border-gray-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center py-6">
             <div className="flex items-center">
               <h1 className="text-2xl font-bold text-gray-900">
-                YouTube Title SEO Optimizer
+                🎵 YouTube SEO Generator
               </h1>
             </div>
             <div className="flex items-center space-x-4">
@@ -38,43 +74,193 @@ function App() {
         </div>
       </header>
 
-      {/* Navigation Tabs */}
-      <nav className="bg-white border-b border-gray-200">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex space-x-8">
-            {tabs.map((tab) => (
-              <button
-                key={tab.id}
-                onClick={() => setActiveTab(tab.id)}
-                className={`py-4 px-1 border-b-2 font-medium text-sm ${
-                  activeTab === tab.id
-                    ? 'border-primary-500 text-primary-600'
-                    : 'border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300'
-                }`}
-              >
-                {tab.name}
-              </button>
-            ))}
-          </div>
-        </div>
-      </nav>
-
       {/* Main Content */}
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <ActiveComponent />
+      <main className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="space-y-6">
+          {/* Input Form */}
+          <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+            <h2 className="text-xl font-semibold text-gray-900 mb-6">
+              Generate SEO-friendly titles and tags for your music covers
+            </h2>
+            
+            <div className="space-y-4">
+              {/* Song Name */}
+              <div>
+                <label htmlFor="songName" className="block text-sm font-medium text-gray-700 mb-2">
+                  Song Name *
+                </label>
+                <input
+                  id="songName"
+                  type="text"
+                  value={songName}
+                  onChange={(e) => setSongName(e.target.value)}
+                  placeholder="e.g., Shape of You, Bohemian Rhapsody"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                />
+              </div>
+
+              {/* Artist */}
+              <div>
+                <label htmlFor="artist" className="block text-sm font-medium text-gray-700 mb-2">
+                  Original Artist (Optional)
+                </label>
+                <input
+                  id="artist"
+                  type="text"
+                  value={artist}
+                  onChange={(e) => setArtist(e.target.value)}
+                  placeholder="e.g., Ed Sheeran, Queen"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                />
+              </div>
+
+              {/* Music Style */}
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Music Style *
+                </label>
+                <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                  {musicCategories.map((category) => (
+                    <button
+                      key={category.id}
+                      onClick={() => setSelectedStyle(category.id)}
+                      className={`p-3 rounded-lg border-2 transition-all duration-200 text-left ${
+                        selectedStyle === category.id
+                          ? 'border-blue-500 bg-blue-50 text-blue-700'
+                          : 'border-gray-200 bg-white hover:border-gray-300 hover:bg-gray-50'
+                      }`}
+                    >
+                      <div className="font-medium text-sm">
+                        {category.name}
+                        {category.englishName && (
+                          <span className="block text-xs text-gray-500 mt-1">
+                            {category.englishName}
+                          </span>
+                        )}
+                      </div>
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Generate Button */}
+              <button
+                onClick={generateSEO}
+                disabled={!songName.trim() || !selectedStyle || isGenerating}
+                className="w-full bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-4 rounded-lg transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                {isGenerating ? '🤖 AI is generating...' : 'Generate'}
+              </button>
+            </div>
+          </div>
+
+          {/* Generated SEO Content */}
+          {seoContent && (
+            <div className="space-y-6">
+              {/* Score */}
+              <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                <div className="flex items-center justify-between">
+                  <h3 className="text-lg font-semibold text-gray-900">SEO Score</h3>
+                  <span className={`text-3xl font-bold ${getScoreColor(seoContent.score)}`}>
+                    {seoContent.score}/100
+                  </span>
+                </div>
+                <div className="w-full bg-gray-200 rounded-full h-3 mt-2">
+                  <div 
+                    className="bg-blue-600 h-3 rounded-full transition-all duration-500"
+                    style={{ width: `${seoContent.score}%` }}
+                  ></div>
+                </div>
+                <p className="text-sm text-gray-600 mt-2">
+                  {seoContent.score >= 85 ? 'Excellent SEO optimization' : 
+                   seoContent.score >= 75 ? 'Good SEO potential' : 'Needs improvement'}
+                </p>
+              </div>
+
+              {/* Title */}
+              <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="text-lg font-semibold text-gray-900">Title (標題)</h3>
+                  <button
+                    onClick={() => copyToClipboard(seoContent.title)}
+                    className="bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium py-2 px-4 rounded-lg transition-colors duration-200"
+                  >
+                    Copy Title
+                  </button>
+                </div>
+                <div className="bg-gray-50 p-4 rounded-lg">
+                  <p className="text-lg font-medium text-gray-900">{seoContent.title}</p>
+                  <p className="text-sm text-gray-500 mt-2">
+                    Length: {seoContent.title.length} characters
+                  </p>
+                </div>
+              </div>
+
+              {/* Description */}
+              <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="text-lg font-semibold text-gray-900">Description (歌曲說明)</h3>
+                  <button
+                    onClick={() => copyToClipboard(seoContent.description)}
+                    className="bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium py-2 px-4 rounded-lg transition-colors duration-200"
+                  >
+                    Copy Description
+                  </button>
+                </div>
+                <div className="bg-gray-50 p-4 rounded-lg">
+                  <pre className="whitespace-pre-wrap text-sm text-gray-900 font-sans">{seoContent.description}</pre>
+                  <p className="text-sm text-gray-500 mt-2">
+                    Length: {seoContent.description.length} characters
+                  </p>
+                </div>
+              </div>
+
+              {/* Tags */}
+              <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                <div className="flex items-center justify-between mb-4">
+                  <h3 className="text-lg font-semibold text-gray-900">Tags (標籤)</h3>
+                  <button
+                    onClick={() => copyToClipboard(seoContent.tags.join(', '))}
+                    className="bg-gray-200 hover:bg-gray-300 text-gray-800 font-medium py-2 px-4 rounded-lg transition-colors duration-200"
+                  >
+                    Copy Tags
+                  </button>
+                </div>
+                <div className="bg-gray-50 p-4 rounded-lg">
+                  <div className="flex flex-wrap gap-2 mb-3">
+                    {seoContent.tags.map((tag, index) => (
+                      <span 
+                        key={index}
+                        className="px-3 py-1 bg-blue-100 text-blue-800 text-sm rounded-full"
+                      >
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+                  <p className="text-sm text-gray-600">
+                    Tags with comma separator: {seoContent.tags.join(', ')}
+                  </p>
+                  <p className="text-sm text-gray-500 mt-2">
+                    Total tags: {seoContent.tags.length} (YouTube recommends max 15)
+                  </p>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
       </main>
 
       {/* Footer */}
       <footer className="bg-white border-t border-gray-200 mt-16">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
+        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="text-center text-gray-500 text-sm">
-            <p>© 2024 YouTube Title SEO Optimizer. Built with ❤️ by techtrekleo</p>
+            <p>© 2024 YouTube SEO Generator. Built with ❤️ by techtrekleo</p>
             <p className="mt-2">
               <a 
                 href="https://github.com/techtrekleo/YouTube-Title-SEO" 
                 target="_blank" 
                 rel="noopener noreferrer"
-                className="text-primary-600 hover:text-primary-700"
+                className="text-blue-600 hover:text-blue-700"
               >
                 View on GitHub
               </a>
