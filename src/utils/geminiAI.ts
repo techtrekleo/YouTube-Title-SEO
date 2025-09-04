@@ -1,11 +1,19 @@
 import { GoogleGenerativeAI } from '@google/generative-ai'
 
-// 初始化 Gemini AI
-const genAI = new GoogleGenerativeAI(import.meta.env.VITE_GEMINI_API_KEY || process.env.GEMINI_API_KEY || '')
+// 初始化 Gemini AI - 支援 Vite 和 Node.js 環境
+const apiKey = (import.meta as any).env?.VITE_GEMINI_API_KEY || (typeof process !== 'undefined' ? process.env?.GEMINI_API_KEY : '') || ''
+console.log('🔑 Gemini API Key available:', !!apiKey, 'Length:', apiKey.length)
+
+const genAI = new GoogleGenerativeAI(apiKey)
 
 // 生成 YouTube 標題
 export const generateAITitle = async (songName: string, artist: string, musicStyles: string[]): Promise<string> => {
+  console.log('🤖 Starting AI title generation...')
   try {
+    if (!apiKey) {
+      throw new Error('No API key available')
+    }
+    
     const model = genAI.getGenerativeModel({ model: 'gemini-pro' })
     
     const prompt = `請為以下音樂生成一個 YouTube 標題，格式為：【歌名】- 歌手名 🖤 描述｜音樂風格 / 情感描述 / 場景描述
@@ -29,19 +37,29 @@ export const generateAITitle = async (songName: string, artist: string, musicSty
 
 只回傳標題，不要其他文字。`
 
+    console.log('📤 Sending request to Gemini AI...')
     const result = await model.generateContent(prompt)
     const response = await result.response
-    return response.text().trim()
+    const title = response.text().trim()
+    console.log('✅ AI title generated:', title)
+    return title
   } catch (error) {
-    console.error('AI 標題生成錯誤:', error)
+    console.error('❌ AI 標題生成錯誤:', error)
     // 回退到預設模板
-    return `【${songName}】- ${artist} 🖤 ${songName} 的音樂世界｜${musicStyles[0]} / Amazing / 音樂欣賞`
+    const fallbackTitle = `【${songName}】- ${artist} 🖤 ${songName} 的音樂世界｜${musicStyles[0]} / Amazing / 音樂欣賞`
+    console.log('🔄 Using fallback title:', fallbackTitle)
+    return fallbackTitle
   }
 }
 
 // 生成 YouTube 說明
 export const generateAIDescription = async (songName: string, artist: string, musicStyles: string[]): Promise<string> => {
+  console.log('🤖 Starting AI description generation...')
   try {
+    if (!apiKey) {
+      throw new Error('No API key available')
+    }
+    
     const model = genAI.getGenerativeModel({ model: 'gemini-pro' })
     
     const prompt = `請為以下音樂生成一個 YouTube 影片說明：
@@ -67,13 +85,16 @@ export const generateAIDescription = async (songName: string, artist: string, mu
 
 請生成完整的說明文字。`
 
+    console.log('📤 Sending request to Gemini AI...')
     const result = await model.generateContent(prompt)
     const response = await result.response
-    return response.text().trim()
+    const description = response.text().trim()
+    console.log('✅ AI description generated (length:', description.length, ')')
+    return description
   } catch (error) {
-    console.error('AI 說明生成錯誤:', error)
+    console.error('❌ AI 說明生成錯誤:', error)
     // 回退到預設模板
-    return `🎵 ${musicStyles[0]} ${songName} music perfect for listening.
+    const fallbackDescription = `🎵 ${musicStyles[0]} ${songName} music perfect for listening.
 
 ✨ Amazing vibes to help you enjoy great music
 
@@ -92,12 +113,19 @@ export const generateAIDescription = async (songName: string, artist: string, mu
 💬 Comment below what you'd like to hear next
 
 🎤 Artist: ${artist}`
+    console.log('🔄 Using fallback description')
+    return fallbackDescription
   }
 }
 
 // 生成 YouTube 標籤
 export const generateAITags = async (songName: string, artist: string, musicStyles: string[]): Promise<string[]> => {
+  console.log('🤖 Starting AI tags generation...')
   try {
+    if (!apiKey) {
+      throw new Error('No API key available')
+    }
+    
     const model = genAI.getGenerativeModel({ model: 'gemini-pro' })
     
     const prompt = `請為以下音樂生成 YouTube 標籤：
@@ -117,26 +145,32 @@ export const generateAITags = async (songName: string, artist: string, musicStyl
 
 請只回傳標籤列表，不要其他文字。`
 
+    console.log('📤 Sending request to Gemini AI...')
     const result = await model.generateContent(prompt)
     const response = await result.response
     const tagsText = response.text().trim()
     
     // 解析標籤
     const tags = tagsText.split(',').map(tag => tag.trim()).filter(tag => tag.length > 0)
-    return tags.slice(0, 20) // 限制最多20個標籤
+    const finalTags = tags.slice(0, 20) // 限制最多20個標籤
+    console.log('✅ AI tags generated:', finalTags.length, 'tags')
+    return finalTags
   } catch (error) {
-    console.error('AI 標籤生成錯誤:', error)
+    console.error('❌ AI 標籤生成錯誤:', error)
     // 回退到預設標籤
-    return [
+    const fallbackTags = [
       songName, `${songName} music`, `${songName} instrumental`, `${songName} cover`,
       artist, `${artist} music`, `${artist} songs`, `${artist} covers`,
       ...musicStyles, `${musicStyles[0]} music`, 'music', 'instrumental', 'cover', 'vocal'
     ]
+    console.log('🔄 Using fallback tags:', fallbackTags.length, 'tags')
+    return fallbackTags
   }
 }
 
 // 完整的 AI 生成函數
 export const generateAIContent = async (songName: string, artist: string, musicStyles: string[]) => {
+  console.log('🚀 Starting complete AI content generation...')
   try {
     const [title, description, tags] = await Promise.all([
       generateAITitle(songName, artist, musicStyles),
@@ -144,6 +178,7 @@ export const generateAIContent = async (songName: string, artist: string, musicS
       generateAITags(songName, artist, musicStyles)
     ])
 
+    console.log('🎉 All AI content generated successfully!')
     return {
       title,
       description,
@@ -152,7 +187,7 @@ export const generateAIContent = async (songName: string, artist: string, musicS
       score: Math.floor(Math.random() * 20) + 80
     }
   } catch (error) {
-    console.error('AI 內容生成錯誤:', error)
+    console.error('❌ AI 內容生成錯誤:', error)
     throw error
   }
 }
