@@ -172,23 +172,31 @@ export const generateAITags = async (songName: string, artist: string, musicStyl
 - 音樂風格：${musicStyles.join(', ')}
 
 SEO 優化要求（重要）：
-1. 標籤必須與標題和描述中的關鍵詞高度重疊
-2. 總字數必須達到 500-800 字（這是SEO評分關鍵）
+1. 主唱名字在標籤中的字數必須超過20字（這是SEO評分關鍵）
+2. 標籤總字數不能超過500字（YouTube限制）
 3. 包含歌名、歌手名、音樂風格的各種變體
-4. 使用中英文混合以增加字數
+4. 確保主唱名字以多種形式出現
 
-請生成 30-40 個相關標籤，要求：
-1. 包含歌名相關標籤（中英文，各種變體）
-2. 包含歌手相關標籤（中英文，各種變體）
-3. 包含音樂風格標籤（中英文，各種變體）
+請生成 20-30 個相關標籤，要求：
+1. 主唱名字必須以多種形式出現，總字數超過20字：
+   - 歌手原名
+   - 歌手名 + music
+   - 歌手名 + 音樂
+   - 歌手名 + songs
+   - 歌手名 + 歌曲
+   - 歌手名 + covers
+   - 歌手名 + 翻唱
+   - 歌手名 + artist
+   - 歌手名 + 藝人
+   - 歌手名 + singer
+   - 歌手名 + 歌手
+2. 包含歌名相關標籤（中英文）
+3. 包含音樂風格標籤（中英文）
 4. 包含情感和場景標籤（中英文）
 5. 包含音樂類型標籤（中英文）
-6. 包含聆聽場景標籤（中英文）
-7. 包含樂器相關標籤（中英文）
-8. 包含情緒相關標籤（中英文）
-9. 總字數必須在 500-800 字之間（重要！）
-10. 用逗號分隔
-11. 中英文標籤都要有，比例約 60% 中文，40% 英文
+6. 總字數控制在500字以內（重要！）
+7. 用逗號分隔
+8. 中英文標籤都要有，比例約 60% 中文，40% 英文
 
 請只回傳標籤列表，不要其他文字。`
 
@@ -199,69 +207,40 @@ SEO 優化要求（重要）：
     
     // 解析標籤
     const tags = tagsText.split(',').map(tag => tag.trim()).filter(tag => tag.length > 0)
-    const finalTags = tags.slice(0, 40) // 限制最多40個標籤
+    const finalTags = tags.slice(0, 30) // 限制最多30個標籤
     console.log('✅ AI tags generated:', finalTags.length, 'tags')
     return finalTags
   } catch (error: any) {
     console.error('❌ AI 標籤生成錯誤:', error)
     console.error('❌ Error details:', error.message)
-    // 回退到預設標籤 - 增加更多中英文標籤以達到500-800字
+    // 回退到預設標籤 - 確保主唱名字字數超過20字，總字數不超過500字
     const fallbackTags = [
-      // 歌名相關（各種變體）
-      songName, `${songName} music`, `${songName} 音樂`, `${songName} instrumental`, `${songName} 演奏版`,
-      `${songName} cover`, `${songName} 翻唱`, `${songName} 純音樂`, `${songName} 背景音樂`,
-      `${songName} song`, `${songName} 歌曲`, `${songName} track`, `${songName} 曲目`,
-      `${songName} audio`, `${songName} 音訊`, `${songName} melody`, `${songName} 旋律`,
+      // 歌名相關
+      songName, `${songName} music`, `${songName} 音樂`, `${songName} instrumental`, `${songName} cover`,
       
-      // 歌手相關（各種變體）
+      // 歌手相關（重點：確保字數超過20字）
       artist, `${artist} music`, `${artist} 音樂`, `${artist} songs`, `${artist} 歌曲`,
-      `${artist} covers`, `${artist} 翻唱`, `${artist} 原唱`, `${artist} 演唱`,
-      `${artist} artist`, `${artist} 藝人`, `${artist} singer`, `${artist} 歌手`,
-      `${artist} performer`, `${artist} 表演者`, `${artist} musician`, `${artist} 音樂家`,
+      `${artist} covers`, `${artist} 翻唱`, `${artist} artist`, `${artist} 藝人`,
+      `${artist} singer`, `${artist} 歌手`, `${artist} performer`, `${artist} 表演者`,
       
-      // 音樂風格相關（各種變體）
-      ...musicStyles, `${musicStyles[0]} music`, `${musicStyles[0]} 音樂`, `${musicStyles[0]} 風格`,
-      `${musicStyles[0]} instrumental`, `${musicStyles[0]} 演奏`, `${musicStyles[0]} 純音樂`,
-      `${musicStyles[0]} genre`, `${musicStyles[0]} 類型`, `${musicStyles[0]} style`, `${musicStyles[0]} 樣式`,
-      `${musicStyles[0]} sound`, `${musicStyles[0]} 聲音`, `${musicStyles[0]} vibe`, `${musicStyles[0]} 氛圍`,
+      // 音樂風格相關
+      ...musicStyles, `${musicStyles[0]} music`, `${musicStyles[0]} 音樂`, `${musicStyles[0]} instrumental`,
       
-      // 通用音樂標籤（擴展）
+      // 通用音樂標籤
       'music', '音樂', 'instrumental', '演奏', 'cover', '翻唱', 'vocal', '人聲',
       'background music', '背景音樂', 'relaxing music', '放鬆音樂', 'chill music', '輕鬆音樂',
-      'study music', '學習音樂', 'work music', '工作音樂', 'sleep music', '睡眠音樂',
-      'ambient music', '環境音樂', 'atmospheric music', '氛圍音樂', 'electronic music', '電子音樂',
-      'acoustic music', '原聲音樂', 'classical music', '古典音樂', 'modern music', '現代音樂',
       
-      // 情感和場景標籤（擴展）
-      'emotional', '情感', 'romantic', '浪漫', 'peaceful', '平靜', 'calm', '寧靜',
-      'beautiful', '美麗', 'amazing', '驚艷', 'perfect', '完美', 'wonderful', '美妙',
+      // 情感和場景標籤
+      'emotional', '情感', 'romantic', '浪漫', 'peaceful', '平靜', 'beautiful', '美麗',
       'relaxing', '放鬆', 'chill', '輕鬆', 'soothing', '舒緩', 'healing', '療癒',
-      'melancholic', '憂鬱', 'nostalgic', '懷舊', 'uplifting', '振奮', 'energetic', '充滿活力',
-      'serene', '寧靜', 'tranquil', '安詳', 'gentle', '溫柔', 'soft', '柔和',
       
-      // 聆聽場景（擴展）
+      // 聆聽場景
       'study', '學習', 'work', '工作', 'sleep', '睡眠', 'meditation', '冥想',
       'reading', '閱讀', 'cafe', '咖啡廳', 'night', '夜晚', 'morning', '早晨',
-      'afternoon', '下午', 'evening', '傍晚', 'weekend', '週末', 'daily', '日常',
-      'driving', '開車', 'walking', '散步', 'exercise', '運動', 'cooking', '烹飪',
-      'shopping', '購物', 'traveling', '旅行', 'vacation', '度假', 'party', '派對',
       
-      // 音樂類型（擴展）
+      // 音樂類型
       'acoustic', '原聲', 'piano', '鋼琴', 'guitar', '吉他', 'violin', '小提琴',
-      'orchestra', '管弦樂', 'symphony', '交響樂', 'classical', '古典', 'modern', '現代',
-      'contemporary', '當代', 'ambient', '環境音樂', 'atmospheric', '氛圍音樂',
-      'jazz', '爵士', 'blues', '藍調', 'rock', '搖滾', 'pop', '流行', 'folk', '民謠',
-      'electronic', '電子', 'dance', '舞曲', 'house', '浩室', 'trance', '出神',
-      
-      // 樂器相關
-      'piano', '鋼琴', 'guitar', '吉他', 'violin', '小提琴', 'cello', '大提琴',
-      'drums', '鼓', 'bass', '貝斯', 'saxophone', '薩克斯風', 'trumpet', '小號',
-      'flute', '長笛', 'clarinet', '單簧管', 'harp', '豎琴', 'organ', '管風琴',
-      
-      // 情緒相關
-      'happy', '快樂', 'sad', '悲傷', 'excited', '興奮', 'calm', '平靜',
-      'energetic', '充滿活力', 'peaceful', '和平', 'melancholic', '憂鬱',
-      'romantic', '浪漫', 'nostalgic', '懷舊', 'hopeful', '充滿希望'
+      'classical', '古典', 'modern', '現代', 'contemporary', '當代', 'ambient', '環境音樂'
     ]
     console.log('🔄 Using fallback tags:', fallbackTags.length, 'tags')
     return fallbackTags
