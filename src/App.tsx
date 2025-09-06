@@ -1,5 +1,5 @@
-import React, { useState } from 'react'
-import { musicCategories, getMusicCategory } from './utils/musicCategories'
+import { useState } from 'react'
+import { musicCategories } from './utils/musicCategories'
 import { generateAIContent } from './utils/geminiAI'
 
 interface SEOContent {
@@ -8,10 +8,21 @@ interface SEOContent {
   tags: string[]
 }
 
+// 支援的語言選項
+const languageOptions = [
+  { id: 'zh', name: '中文', flag: '🇨🇳' },
+  { id: 'en', name: 'English', flag: '🇺🇸' },
+  { id: 'ja', name: '日本語', flag: '🇯🇵' },
+  { id: 'ko', name: '한국어', flag: '🇰🇷' },
+  { id: 'es', name: 'Español', flag: '🇪🇸' },
+  { id: 'fr', name: 'Français', flag: '🇫🇷' }
+]
+
 function App() {
   const [songName, setSongName] = useState('')
   const [artist, setArtist] = useState('')
   const [selectedStyles, setSelectedStyles] = useState<string[]>([])
+  const [selectedLanguage, setSelectedLanguage] = useState('zh') // 預設中文
   const [seoContent, setSeoContent] = useState<SEOContent | null>(null)
   const [isGenerating, setIsGenerating] = useState(false)
   const [error, setError] = useState<string | null>(null)
@@ -32,7 +43,7 @@ function App() {
     
     try {
       const artistName = artist || 'Unknown Artist'
-      const result = await generateAIContent(songName, artistName, selectedStyles)
+      const result = await generateAIContent(songName, artistName, selectedStyles, selectedLanguage)
       
       setSeoContent({
         title: result.title,
@@ -102,6 +113,29 @@ function App() {
                   placeholder="e.g., Ed Sheeran, Queen"
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-2">
+                  Language (語言) *
+                </label>
+                <div className="grid grid-cols-3 md:grid-cols-6 gap-3">
+                  {languageOptions.map((lang) => (
+                    <button
+                      key={lang.id}
+                      onClick={() => setSelectedLanguage(lang.id)}
+                      className={`p-3 rounded-lg border-2 transition-all duration-200 text-center ${
+                        selectedLanguage === lang.id
+                          ? 'border-blue-500 bg-blue-50 text-blue-700'
+                          : 'border-gray-200 bg-white hover:border-gray-300 hover:bg-gray-50'
+                      }`}
+                    >
+                      <div className="font-medium text-sm">
+                        {lang.flag} {lang.name}
+                      </div>
+                    </button>
+                  ))}
+                </div>
               </div>
 
               <div>

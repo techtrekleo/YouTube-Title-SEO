@@ -7,7 +7,7 @@ console.log('🔑 Gemini API Key available:', !!apiKey, 'Length:', apiKey.length
 const genAI = new GoogleGenerativeAI(apiKey)
 
 // 生成 YouTube 標題
-export const generateAITitle = async (songName: string, artist: string, musicStyles: string[]): Promise<string> => {
+export const generateAITitle = async (songName: string, artist: string, musicStyles: string[], language: string = 'zh'): Promise<string> => {
   console.log('🤖 Starting AI title generation...')
   try {
     if (!apiKey) {
@@ -22,7 +22,10 @@ export const generateAITitle = async (songName: string, artist: string, musicSty
     
     const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' })
     
-    const prompt = `請為以下音樂生成一個 YouTube 標題，格式為：【歌名】- 歌手名 🖤 描述｜音樂風格 / 情感描述 / 場景描述
+    // 根據語言選擇不同的提示詞
+    let prompt = ''
+    if (language === 'zh') {
+      prompt = `請為以下音樂生成一個 YouTube 標題，格式為：【歌名】- 歌手名 🖤 描述｜音樂風格 / 情感描述 / 場景描述
 
 歌曲資訊：
 - 歌名：${songName}
@@ -32,13 +35,6 @@ export const generateAITitle = async (songName: string, artist: string, musicSty
 請生成一個符合以下格式的標題：
 【歌名】- 歌手名 🖤 描述｜音樂風格 / 情感描述 / 場景描述
 
-SEO 優化要求：
-1. 標題必須包含主要音樂風格關鍵詞
-2. 包含歌名和歌手名（用於後續描述重複）
-3. 描述部分要包含可作為標籤的關鍵詞
-4. 總長度控制在60字以內
-5. 使用吸引人的表情符號和分隔符
-
 例如：
 【煙雨一城】- 夏音 Natsune 🖤 煙雨江湖的孤城守望｜Chill Lofi / Emotional Female Vocal / 夜雨思念BGM
 
@@ -47,9 +43,70 @@ SEO 優化要求：
 2. 情感描述要貼切
 3. 場景描述要有意境
 4. 整體要吸引人點擊
-5. 包含SEO關鍵詞用於後續標籤生成
 
 只回傳標題，不要其他文字。`
+    } else if (language === 'en') {
+      prompt = `Generate a YouTube title for the following music in English format: 【Song Name】- Artist Name 🖤 Description｜Music Style / Emotional Description / Scene Description
+
+Song Info:
+- Song Name: ${songName}
+- Original Artist: ${artist}
+- Music Styles: ${musicStyles.join(', ')}
+
+Please generate a title in this format:
+【Song Name】- Artist Name 🖤 Description｜Music Style / Emotional Description / Scene Description
+
+Example:
+【Shape of You】- Ed Sheeran 🖤 Perfect Pop Anthem｜Pop / Emotional / Love Story
+
+Please ensure:
+1. Description matches the music style
+2. Emotional description is appropriate
+3. Scene description is engaging
+4. Overall is click-worthy
+
+Return only the title, no other text.`
+    } else if (language === 'ja') {
+      prompt = `以下の音楽のYouTubeタイトルを日本語で生成してください。形式：【曲名】- アーティスト名 🖤 説明｜音楽スタイル / 感情説明 / シーン説明
+
+曲情報：
+- 曲名：${songName}
+- 原曲アーティスト：${artist}
+- 音楽スタイル：${musicStyles.join(', ')}
+
+以下の形式でタイトルを生成してください：
+【曲名】- アーティスト名 🖤 説明｜音楽スタイル / 感情説明 / シーン説明
+
+例：
+【桜】- 宇多田ヒカル 🖤 春の美しいメロディー｜J-Pop / 感情豊か / 桜の季節
+
+以下の点を確認してください：
+1. 説明は音楽スタイルに合っている
+2. 感情説明が適切
+3. シーン説明が魅力的
+4. 全体的にクリックしたくなる
+
+タイトルのみを返してください。`
+    } else {
+      // 其他語言使用英文
+      prompt = `Generate a YouTube title for the following music in ${language} format: 【Song Name】- Artist Name 🖤 Description｜Music Style / Emotional Description / Scene Description
+
+Song Info:
+- Song Name: ${songName}
+- Original Artist: ${artist}
+- Music Styles: ${musicStyles.join(', ')}
+
+Please generate a title in this format:
+【Song Name】- Artist Name 🖤 Description｜Music Style / Emotional Description / Scene Description
+
+Please ensure:
+1. Description matches the music style
+2. Emotional description is appropriate
+3. Scene description is engaging
+4. Overall is click-worthy
+
+Return only the title, no other text.`
+    }
 
     console.log('📤 Sending request to Gemini AI...')
     const result = await model.generateContent(prompt)
@@ -68,7 +125,7 @@ SEO 優化要求：
 }
 
 // 生成 YouTube 說明
-export const generateAIDescription = async (songName: string, artist: string, musicStyles: string[]): Promise<string> => {
+export const generateAIDescription = async (songName: string, artist: string, musicStyles: string[], language: string = 'zh'): Promise<string> => {
   console.log('🤖 Starting AI description generation...')
   try {
     if (!apiKey) {
@@ -83,36 +140,102 @@ export const generateAIDescription = async (songName: string, artist: string, mu
     
     const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' })
     
-    const prompt = `請為以下音樂生成一個 YouTube 影片說明：
+    // 根據語言選擇不同的提示詞
+    let prompt = ''
+    if (language === 'zh') {
+      prompt = `請為以下音樂生成一個 YouTube 影片說明：
 
 歌曲資訊：
 - 歌名：${songName}
 - 原唱：${artist}
 - 音樂風格：${musicStyles.join(', ')}
 
-SEO 優化要求（重要）：
-1. 描述中必須重複標題中的關鍵詞（歌名、歌手名、音樂風格）
-2. 包含大量相關標籤（使用 # 符號）
-3. 標籤要與標題中的關鍵詞重疊
-4. 總字數控制在500-800字之間
-5. 標籤部分至少包含15-20個標籤
-
 請生成一個完整的 YouTube 說明，包含：
-1. 開頭介紹（使用表情符號，重複歌名和歌手名）
-2. 音樂特色描述（重複音樂風格關鍵詞）
+1. 開頭介紹（使用表情符號）
+2. 音樂特色描述
 3. 適合的聆聽場景
-4. 大量相關標籤（使用 #，至少15-20個）
+4. 相關標籤（使用 #）
 5. 訂閱和互動呼籲
-6. 歌手資訊（重複歌手名）
+6. 歌手資訊
 
 格式要求：
 - 使用表情符號增加視覺效果
-- 包含大量標籤（至少15-20個）
+- 包含適當的標籤
 - 鼓勵訂閱和互動
-- 長度適中（500-800字）
-- 確保標題關鍵詞在描述中重複出現
+- 長度適中（200-400字）
 
 請生成完整的說明文字。`
+    } else if (language === 'en') {
+      prompt = `Generate a YouTube video description for the following music:
+
+Song Info:
+- Song Name: ${songName}
+- Original Artist: ${artist}
+- Music Styles: ${musicStyles.join(', ')}
+
+Please generate a complete YouTube description including:
+1. Introduction with emojis
+2. Music feature description
+3. Suitable listening scenarios
+4. Related tags (using #)
+5. Subscription and interaction call-to-action
+6. Artist information
+
+Format requirements:
+- Use emojis for visual appeal
+- Include appropriate tags
+- Encourage subscription and interaction
+- Moderate length (200-400 words)
+
+Please generate the complete description text.`
+    } else if (language === 'ja') {
+      prompt = `以下の音楽のYouTube動画説明を生成してください：
+
+曲情報：
+- 曲名：${songName}
+- 原曲アーティスト：${artist}
+- 音楽スタイル：${musicStyles.join(', ')}
+
+完全なYouTube説明を生成してください。含むべき内容：
+1. 絵文字を使った紹介
+2. 音楽の特徴説明
+3. 適した聴取シーン
+4. 関連タグ（#を使用）
+5. チャンネル登録とインタラクションの呼びかけ
+6. アーティスト情報
+
+形式要件：
+- 視覚的魅力のために絵文字を使用
+- 適切なタグを含める
+- チャンネル登録とインタラクションを促進
+- 適度な長さ（200-400語）
+
+完全な説明文を生成してください。`
+    } else {
+      // 其他語言使用英文
+      prompt = `Generate a YouTube video description for the following music in ${language}:
+
+Song Info:
+- Song Name: ${songName}
+- Original Artist: ${artist}
+- Music Styles: ${musicStyles.join(', ')}
+
+Please generate a complete YouTube description including:
+1. Introduction with emojis
+2. Music feature description
+3. Suitable listening scenarios
+4. Related tags (using #)
+5. Subscription and interaction call-to-action
+6. Artist information
+
+Format requirements:
+- Use emojis for visual appeal
+- Include appropriate tags
+- Encourage subscription and interaction
+- Moderate length (200-400 words)
+
+Please generate the complete description text.`
+    }
 
     console.log('📤 Sending request to Gemini AI...')
     const result = await model.generateContent(prompt)
@@ -149,7 +272,7 @@ SEO 優化要求（重要）：
 }
 
 // 生成 YouTube 標籤
-export const generateAITags = async (songName: string, artist: string, musicStyles: string[]): Promise<string[]> => {
+export const generateAITags = async (songName: string, artist: string, musicStyles: string[], language: string = 'zh'): Promise<string[]> => {
   console.log('🤖 Starting AI tags generation...')
   try {
     if (!apiKey) {
@@ -164,41 +287,86 @@ export const generateAITags = async (songName: string, artist: string, musicStyl
     
     const model = genAI.getGenerativeModel({ model: 'gemini-2.5-flash' })
     
-    const prompt = `請為以下音樂生成 YouTube 標籤：
+    // 根據語言選擇不同的提示詞
+    let prompt = ''
+    if (language === 'zh') {
+      prompt = `請為以下音樂生成 YouTube 標籤：
 
 歌曲資訊：
 - 歌名：${songName}
 - 原唱：${artist}
 - 音樂風格：${musicStyles.join(', ')}
 
-SEO 優化要求（重要）：
-1. 主唱名字在標籤中的字數必須超過20字（這是SEO評分關鍵）
-2. 標籤總字數不能超過500字（YouTube限制）
-3. 包含歌名、歌手名、音樂風格的各種變體
-4. 確保主唱名字以多種形式出現
-
-請生成 20-30 個相關標籤，要求：
-1. 主唱名字必須以多種形式出現，總字數超過20字：
-   - 歌手原名
-   - 歌手名 + music
-   - 歌手名 + 音樂
-   - 歌手名 + songs
-   - 歌手名 + 歌曲
-   - 歌手名 + covers
-   - 歌手名 + 翻唱
-   - 歌手名 + artist
-   - 歌手名 + 藝人
-   - 歌手名 + singer
-   - 歌手名 + 歌手
-2. 包含歌名相關標籤（中英文）
-3. 包含音樂風格標籤（中英文）
-4. 包含情感和場景標籤（中英文）
-5. 包含音樂類型標籤（中英文）
-6. 總字數控制在500字以內（重要！）
+請生成 25-35 個相關標籤，要求：
+1. 包含歌名相關標籤（${songName}、${songName}音樂、${songName}翻唱等）
+2. 包含歌手相關標籤（${artist}、${artist}音樂、${artist}歌曲等）
+3. 包含音樂風格標籤（${musicStyles.join('、')}等）
+4. 包含熱門關鍵字（音樂、翻唱、cover、vocal、instrumental、chill、relaxing、study、work、background music等）
+5. 包含情感和場景標籤（emotional、beautiful、amazing、perfect、love、sad、happy等）
+6. 總字數在 400-600 字之間
 7. 用逗號分隔
-8. 中英文標籤都要有，比例約 60% 中文，40% 英文
+8. 避免過長或冷門的關鍵字
 
 請只回傳標籤列表，不要其他文字。`
+    } else if (language === 'en') {
+      prompt = `Generate YouTube tags for the following music:
+
+Song Info:
+- Song Name: ${songName}
+- Original Artist: ${artist}
+- Music Styles: ${musicStyles.join(', ')}
+
+Please generate 25-35 relevant tags with these requirements:
+1. Include song name related tags (${songName}, ${songName} music, ${songName} cover, etc.)
+2. Include artist related tags (${artist}, ${artist} music, ${artist} songs, etc.)
+3. Include music style tags (${musicStyles.join(', ')}, etc.)
+4. Include popular keywords (music, cover, vocal, instrumental, chill, relaxing, study, work, background music, etc.)
+5. Include emotional and scene tags (emotional, beautiful, amazing, perfect, love, sad, happy, etc.)
+6. Total characters between 400-600
+7. Separate with commas
+8. Avoid overly long or niche keywords
+
+Return only the tag list, no other text.`
+    } else if (language === 'ja') {
+      prompt = `以下の音楽のYouTubeタグを生成してください：
+
+曲情報：
+- 曲名：${songName}
+- 原曲アーティスト：${artist}
+- 音楽スタイル：${musicStyles.join(', ')}
+
+25-35個の関連タグを生成してください。要件：
+1. 曲名関連タグを含む（${songName}、${songName}音楽、${songName}カバーなど）
+2. アーティスト関連タグを含む（${artist}、${artist}音楽、${artist}楽曲など）
+3. 音楽スタイルタグを含む（${musicStyles.join('、')}など）
+4. 人気キーワードを含む（音楽、カバー、ボーカル、インスト、チル、リラックス、勉強、仕事、BGMなど）
+5. 感情とシーンのタグを含む（感情的、美しい、素晴らしい、完璧、愛、悲しい、幸せなど）
+6. 総文字数400-600文字
+7. カンマで区切る
+8. 長すぎるやニッチなキーワードは避ける
+
+タグリストのみを返してください。`
+    } else {
+      // 其他語言使用英文
+      prompt = `Generate YouTube tags for the following music in ${language}:
+
+Song Info:
+- Song Name: ${songName}
+- Original Artist: ${artist}
+- Music Styles: ${musicStyles.join(', ')}
+
+Please generate 25-35 relevant tags with these requirements:
+1. Include song name related tags
+2. Include artist related tags
+3. Include music style tags
+4. Include popular keywords
+5. Include emotional and scene tags
+6. Total characters between 400-600
+7. Separate with commas
+8. Avoid overly long or niche keywords
+
+Return only the tag list, no other text.`
+    }
 
     console.log('📤 Sending request to Gemini AI...')
     const result = await model.generateContent(prompt)
@@ -207,40 +375,17 @@ SEO 優化要求（重要）：
     
     // 解析標籤
     const tags = tagsText.split(',').map(tag => tag.trim()).filter(tag => tag.length > 0)
-    const finalTags = tags.slice(0, 30) // 限制最多30個標籤
+    const finalTags = tags.slice(0, 20) // 限制最多20個標籤
     console.log('✅ AI tags generated:', finalTags.length, 'tags')
     return finalTags
   } catch (error: any) {
     console.error('❌ AI 標籤生成錯誤:', error)
     console.error('❌ Error details:', error.message)
-    // 回退到預設標籤 - 確保主唱名字字數超過20字，總字數不超過500字
+    // 回退到預設標籤
     const fallbackTags = [
-      // 歌名相關
-      songName, `${songName} music`, `${songName} 音樂`, `${songName} instrumental`, `${songName} cover`,
-      
-      // 歌手相關（重點：確保字數超過20字）
-      artist, `${artist} music`, `${artist} 音樂`, `${artist} songs`, `${artist} 歌曲`,
-      `${artist} covers`, `${artist} 翻唱`, `${artist} artist`, `${artist} 藝人`,
-      `${artist} singer`, `${artist} 歌手`, `${artist} performer`, `${artist} 表演者`,
-      
-      // 音樂風格相關
-      ...musicStyles, `${musicStyles[0]} music`, `${musicStyles[0]} 音樂`, `${musicStyles[0]} instrumental`,
-      
-      // 通用音樂標籤
-      'music', '音樂', 'instrumental', '演奏', 'cover', '翻唱', 'vocal', '人聲',
-      'background music', '背景音樂', 'relaxing music', '放鬆音樂', 'chill music', '輕鬆音樂',
-      
-      // 情感和場景標籤
-      'emotional', '情感', 'romantic', '浪漫', 'peaceful', '平靜', 'beautiful', '美麗',
-      'relaxing', '放鬆', 'chill', '輕鬆', 'soothing', '舒緩', 'healing', '療癒',
-      
-      // 聆聽場景
-      'study', '學習', 'work', '工作', 'sleep', '睡眠', 'meditation', '冥想',
-      'reading', '閱讀', 'cafe', '咖啡廳', 'night', '夜晚', 'morning', '早晨',
-      
-      // 音樂類型
-      'acoustic', '原聲', 'piano', '鋼琴', 'guitar', '吉他', 'violin', '小提琴',
-      'classical', '古典', 'modern', '現代', 'contemporary', '當代', 'ambient', '環境音樂'
+      songName, `${songName} music`, `${songName} instrumental`, `${songName} cover`,
+      artist, `${artist} music`, `${artist} songs`, `${artist} covers`,
+      ...musicStyles, `${musicStyles[0]} music`, 'music', 'instrumental', 'cover', 'vocal'
     ]
     console.log('🔄 Using fallback tags:', fallbackTags.length, 'tags')
     return fallbackTags
@@ -248,13 +393,13 @@ SEO 優化要求（重要）：
 }
 
 // 完整的 AI 生成函數
-export const generateAIContent = async (songName: string, artist: string, musicStyles: string[]) => {
+export const generateAIContent = async (songName: string, artist: string, musicStyles: string[], language: string = 'zh') => {
   console.log('🚀 Starting complete AI content generation...')
   try {
     const [title, description, tags] = await Promise.all([
-      generateAITitle(songName, artist, musicStyles),
-      generateAIDescription(songName, artist, musicStyles),
-      generateAITags(songName, artist, musicStyles)
+      generateAITitle(songName, artist, musicStyles, language),
+      generateAIDescription(songName, artist, musicStyles, language),
+      generateAITags(songName, artist, musicStyles, language)
     ])
 
     console.log('🎉 All AI content generated successfully!')
