@@ -262,15 +262,15 @@ function App() {
       <footer className="bg-white border-t border-gray-200 mt-16">
         <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
           <div className="text-center text-gray-500 text-sm">
-            <p>© 2024 YouTube SEO Generator. Built with ❤️ by 音樂脈動-Sonic Pulse</p>
+            <p>© {new Date().getFullYear()} Sonic Pulse. Built with ❤️ by 音樂脈動-Sonic Pulse</p>
             <p className="mt-2">
               <a 
                 href="https://www.youtube.com/@%E9%9F%B3%E6%A8%82%E8%84%88%E5%8B%95SonicPulse" 
                 target="_blank" 
                 rel="noopener noreferrer"
-                className="text-blue-600 hover:text-blue-700"
+                className="text-blue-600 hover:text-blue-700 font-medium"
               >
-                🎵 音樂脈動-Sonic Pulse YouTube Channel
+                🎵 Sonic Pulse YouTube Channel
               </a>
             </p>
             
