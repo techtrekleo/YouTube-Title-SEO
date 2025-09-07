@@ -273,6 +273,19 @@ function App() {
                 🎵 音樂脈動-Sonic Pulse YouTube Channel
               </a>
             </p>
+            
+            {/* 抖內按鈕 */}
+            <div className="mt-6 flex justify-center">
+              <a
+                href="https://www.paypal.com/ncp/payment/PK49RJYSTAV6Y"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 text-white px-6 py-3 rounded-full font-medium transition-all duration-200 transform hover:scale-105 shadow-lg hover:shadow-xl"
+              >
+                <span className="text-xl">🐱</span>
+                <span>抖內支持開發者</span>
+              </a>
+            </div>
           </div>
         </div>
       </footer>
