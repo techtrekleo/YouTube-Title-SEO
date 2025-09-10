@@ -277,6 +277,66 @@ export const musicCategories: MusicCategory[] = [
       'Classical {topic} Collection'
     ],
     trendingTopics: ['orchestra', 'piano classical', 'symphony', 'mozart', 'beethoven', 'chopin']
+  },
+  {
+    id: 'smoky-voice',
+    name: '菸嗓',
+    englishName: 'Smoky Voice',
+    description: '富有磁性的菸嗓風格，充滿滄桑和魅力',
+    keywords: ['smoky voice', 'raspy', 'husky', 'gravelly', 'deep', 'magnetic', 'charismatic', 'sultry'],
+    titleTemplates: [
+      'Smoky Voice {topic} - Magnetic Charm',
+      '{topic} Smoky Voice Version',
+      'Raspy {topic} - Smoky Style',
+      '{topic} Smoky Voice Cover',
+      'Smoky Voice {topic} - Charismatic'
+    ],
+    trendingTopics: ['smoky voice', 'raspy vocals', 'husky voice', 'gravelly', 'magnetic', 'charismatic']
+  },
+  {
+    id: 'jpop',
+    name: 'J-pop',
+    englishName: 'J-Pop',
+    description: '日本流行音樂，時尚現代',
+    keywords: ['jpop', 'j-pop', 'japanese pop', 'japanese', 'anime', 'kawaii', 'modern', 'trendy'],
+    titleTemplates: [
+      'J-Pop {topic} - Japanese Style',
+      '{topic} J-Pop Version',
+      'Japanese Pop {topic}',
+      '{topic} J-Pop Cover',
+      'J-Pop {topic} - Kawaii'
+    ],
+    trendingTopics: ['jpop', 'japanese pop', 'anime music', 'kawaii', 'modern japanese', 'trendy']
+  },
+  {
+    id: 'japanese-style',
+    name: '和風',
+    englishName: 'Japanese Style',
+    description: '傳統日本和風音樂，優雅寧靜',
+    keywords: ['japanese style', 'traditional', 'zen', 'peaceful', 'elegant', 'minimalist', 'meditation', 'zen'],
+    titleTemplates: [
+      'Japanese Style {topic} - Traditional Zen',
+      '{topic} Japanese Style Version',
+      'Traditional {topic} - Japanese Style',
+      '{topic} Japanese Style Cover',
+      'Japanese Style {topic} - Zen'
+    ],
+    trendingTopics: ['japanese traditional', 'zen music', 'peaceful', 'elegant', 'minimalist', 'meditation']
+  },
+  {
+    id: 'chinese-style',
+    name: '中國風',
+    englishName: 'Chinese Style',
+    description: '傳統中國風音樂，古典優雅',
+    keywords: ['chinese style', 'traditional chinese', 'classical chinese', 'elegant', 'ancient', 'oriental', 'zen', 'peaceful'],
+    titleTemplates: [
+      'Chinese Style {topic} - Traditional Elegance',
+      '{topic} Chinese Style Version',
+      'Traditional Chinese {topic}',
+      '{topic} Chinese Style Cover',
+      'Chinese Style {topic} - Oriental'
+    ],
+    trendingTopics: ['chinese traditional', 'oriental music', 'classical chinese', 'elegant', 'ancient', 'zen']
   }
 ]
 

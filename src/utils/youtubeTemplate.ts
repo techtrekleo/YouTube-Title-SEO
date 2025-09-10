@@ -6,6 +6,27 @@ export interface YouTubeTemplate {
   score: number
 }
 
+// 隨機符號生成函數
+const getRandomSymbol = (): string => {
+  const symbols = ['🖤', '💫', '✨', '🌟', '💎', '🎵', '🎶', '💖', '💝', '💕', '💗', '💓', '💘', '💞', '💟', '💜', '💙', '💚', '💛', '🧡', '❤️', '🤍', '🖤', '💯', '🔥', '⭐', '🌙', '☀️', '🌈', '🎭', '🎨', '🎪', '🎯', '🎲', '🎸', '🎹', '🎺', '🎻', '🥁', '🎤', '🎧', '🎵', '🎶']
+  return symbols[Math.floor(Math.random() * symbols.length)]
+}
+
+// 隨機標題格式生成函數（固定歌名和歌手格式）
+const getRandomTitleFormat = (): string => {
+  const formats = [
+    '【{topic}】- {artist} {symbol} {description}｜{style} / {emotion} / {scene}',
+    '【{topic}】- {artist} {symbol} {description}｜{style} Music / {emotion} / {scene}',
+    '【{topic}】- {artist} {symbol} {description}｜{style} Version / {emotion} / {scene}',
+    '【{topic}】- {artist} {symbol} {description}｜{style} Cover / {emotion} / {scene}',
+    '【{topic}】- {artist} {symbol} {description}｜{style} Instrumental / {emotion} / {scene}',
+    '【{topic}】- {artist} {symbol} {description}｜{style} Acoustic / {emotion} / {scene}',
+    '【{topic}】- {artist} {symbol} {description}｜{style} Piano / {emotion} / {scene}',
+    '【{topic}】- {artist} {symbol} {description}｜{style} Guitar / {emotion} / {scene}'
+  ]
+  return formats[Math.floor(Math.random() * formats.length)]
+}
+
 export interface MusicTemplateData {
   musicCategory: string
   topic: string
@@ -23,7 +44,8 @@ export const musicCategoryIds: { [key: string]: string } = {
   'pop': '10', 'rock': '10', 'lofi': '10', 'acoustic': '10',
   'instrumental': '10', 'rnb': '10', 'hip-hop': '10', 'electronic': '10',
   'hifi': '10', 'city-pop': '10', 'soul': '10', 'rap': '10',
-  'jazz': '10', 'classical': '10'
+  'jazz': '10', 'classical': '10', 'smoky-voice': '10', 'jpop': '10',
+  'japanese-style': '10', 'chinese-style': '10'
 }
 
 // 生成 YouTube 標題
@@ -49,7 +71,11 @@ export const generateYouTubeTitle = (data: MusicTemplateData): string => {
     'soul': 'Soul',
     'rap': 'Rap',
     'jazz': 'Jazz',
-    'classical': 'Classical'
+    'classical': 'Classical',
+    'smoky-voice': 'Smoky Voice',
+    'jpop': 'J-Pop',
+    'japanese-style': 'Japanese Style',
+    'chinese-style': 'Chinese Style'
   }
 
   // 情感描述模板
@@ -71,7 +97,11 @@ export const generateYouTubeTitle = (data: MusicTemplateData): string => {
     'soul': ['Deep', 'Emotional', 'Passionate', 'Soulful', 'Gospel'],
     'rap': ['Urban', 'Rhythmic', 'Street', 'Lyrical', 'Dynamic'],
     'jazz': ['Smooth', 'Sophisticated', 'Classic', 'Elegant', 'Swing'],
-    'classical': ['Timeless', 'Refined', 'Majestic', 'Elegant', 'Symphonic']
+    'classical': ['Timeless', 'Refined', 'Majestic', 'Elegant', 'Symphonic'],
+    'smoky-voice': ['Magnetic', 'Charismatic', 'Sultry', 'Deep', 'Raspy'],
+    'jpop': ['Kawaii', 'Trendy', 'Energetic', 'Modern', 'Cute'],
+    'japanese-style': ['Zen', 'Peaceful', 'Elegant', 'Minimalist', 'Meditative'],
+    'chinese-style': ['Elegant', 'Ancient', 'Oriental', 'Classical', 'Traditional']
   }
 
   // 場景描述模板
@@ -93,7 +123,11 @@ export const generateYouTubeTitle = (data: MusicTemplateData): string => {
     'soul': ['靈魂音樂', '福音音樂', '藍調音樂', '情感音樂', '深層音樂'],
     'rap': ['饒舌音樂', '說唱音樂', '街頭音樂', '節奏音樂', '歌詞音樂'],
     'jazz': ['爵士音樂', '搖擺音樂', '即興音樂', '經典爵士', '優雅爵士'],
-    'classical': ['古典音樂', '交響樂', '鋼琴音樂', '管弦樂', '經典音樂']
+    'classical': ['古典音樂', '交響樂', '鋼琴音樂', '管弦樂', '經典音樂'],
+    'smoky-voice': ['菸嗓魅力', '磁性嗓音', '滄桑音樂', '深夜酒吧', '成熟魅力'],
+    'jpop': ['J-Pop 音樂', '動漫音樂', '可愛音樂', '日本流行', 'Kawaii 風格'],
+    'japanese-style': ['和風音樂', '禪意音樂', '日式冥想', '傳統和風', '寧靜時光'],
+    'chinese-style': ['中國風音樂', '古典中國', '東方韻味', '傳統音樂', '古風雅韻']
   }
 
   // 歌手名稱處理
@@ -124,7 +158,16 @@ export const generateYouTubeTitle = (data: MusicTemplateData): string => {
   const randomDescription = descriptions[Math.floor(Math.random() * descriptions.length)]
 
   // 組合標題
-  return `【${topic}】- ${artistName} 🖤 ${randomDescription}｜${styleName} / ${randomEmotion} / ${randomScene}`
+  const randomSymbol = getRandomSymbol()
+  const randomFormat = getRandomTitleFormat()
+  return randomFormat
+    .replace('{topic}', topic)
+    .replace('{artist}', artistName)
+    .replace('{symbol}', randomSymbol)
+    .replace('{description}', randomDescription)
+    .replace('{style}', styleName)
+    .replace('{emotion}', randomEmotion)
+    .replace('{scene}', randomScene)
 }
 
 // 生成 YouTube 說明
@@ -255,13 +298,13 @@ export const generateYouTubeTags = (data: MusicTemplateData): string[] => {
   const allTags = [...allStyleTags, ...topicTags, ...artistTags, ...activityTags, ...moodTags]
   const uniqueTags = [...new Set(allTags)]
   
-  // 計算標籤字數並調整到 300-500 字之間
+  // 計算標籤字數並調整到 500-800 字之間（提升SEO評分）
   let finalTags: string[] = []
   let currentLength = 0
   
   for (const tag of uniqueTags) {
     const tagLength = tag.length + 2 // +2 for comma and space
-    if (currentLength + tagLength <= 500) {
+    if (currentLength + tagLength <= 800) {
       finalTags.push(tag)
       currentLength += tagLength
     } else {
@@ -269,12 +312,12 @@ export const generateYouTubeTags = (data: MusicTemplateData): string[] => {
     }
   }
   
-  // 確保至少有 300 字
-  if (currentLength < 300 && uniqueTags.length > finalTags.length) {
+  // 確保至少有 500 字
+  if (currentLength < 500 && uniqueTags.length > finalTags.length) {
     for (let i = finalTags.length; i < uniqueTags.length; i++) {
       const tag = uniqueTags[i]
       const tagLength = tag.length + 2
-      if (currentLength + tagLength <= 500) {
+      if (currentLength + tagLength <= 800) {
         finalTags.push(tag)
         currentLength += tagLength
       } else {
