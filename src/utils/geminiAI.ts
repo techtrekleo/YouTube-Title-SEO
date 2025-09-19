@@ -281,18 +281,18 @@ export const generateAIDescription = async (songName: string, artist: string, mu
 1. 開頭介紹（使用表情符號）
 2. 音樂特色描述
 3. 適合的聆聽場景
-4. 相關標籤（使用 #）
+4. 標籤（使用 # 符號，但不要標題格式）
 5. 訂閱和互動呼籲
 6. 歌手資訊
 
 格式要求：
 - 使用表情符號增加視覺效果
-- 包含適當的標籤
+- 包含適當的標籤（直接在內容中使用#標籤，不要使用「**# 相關標籤：**」等標題格式）
 - 鼓勵訂閱和互動
 - 長度適中（200-400字）
-- **重要：必須在描述中多次提及歌名「${songName}」，確保標題關鍵字出現在描述中**
-- **重要：必須在描述中提及歌手「${artist}」**
-- **重要：必須在描述中提及音樂風格「${musicStyles.join(', ')}」**
+- 重要：必須在描述中多次提及歌名「${songName}」，確保標題關鍵字出現在描述中
+- 重要：必須在描述中提及歌手「${artist}」
+- 重要：必須在描述中提及音樂風格「${musicStyles.join(', ')}」
 
 請生成完整的說明文字。`
     } else if (language === 'en') {
@@ -307,18 +307,18 @@ Please generate a complete YouTube description including:
 1. Introduction with emojis
 2. Music feature description
 3. Suitable listening scenarios
-4. Related tags (using #)
+4. Tags (using # symbols, but not as section headers)
 5. Subscription and interaction call-to-action
 6. Artist information
 
 Format requirements:
 - Use emojis for visual appeal
-- Include appropriate tags
+- Include appropriate tags (use # tags directly in content, do not use section headers like "**# Related Tags:**")
 - Encourage subscription and interaction
 - Moderate length (200-400 words)
-- **IMPORTANT: Must mention the song name "${songName}" multiple times in the description to ensure title keywords appear in description**
-- **IMPORTANT: Must mention the artist "${artist}" in the description**
-- **IMPORTANT: Must mention the music styles "${musicStyles.join(', ')}" in the description**
+- IMPORTANT: Must mention the song name "${songName}" multiple times in the description to ensure title keywords appear in description
+- IMPORTANT: Must mention the artist "${artist}" in the description
+- IMPORTANT: Must mention the music styles "${musicStyles.join(', ')}" in the description
 
 Please generate the complete description text.`
     } else if (language === 'ja') {
@@ -333,7 +333,7 @@ Please generate the complete description text.`
 1. 絵文字を使った紹介
 2. 音楽の特徴説明
 3. 適した聴取シーン
-4. 関連タグ（#を使用）
+4. タグ（#記号を使用、但しセクション見出しではなく）
 5. チャンネル登録とインタラクションの呼びかけ
 6. アーティスト情報
 
@@ -342,9 +342,9 @@ Please generate the complete description text.`
 - 適切なタグを含める
 - チャンネル登録とインタラクションを促進
 - 適度な長さ（200-400語）
-- **重要：説明文で曲名「${songName}」を複数回言及し、タイトルのキーワードが説明に含まれるようにする**
-- **重要：説明文でアーティスト「${artist}」を言及する**
-- **重要：説明文で音楽スタイル「${musicStyles.join(', ')}」を言及する**
+- 重要：説明文で曲名「${songName}」を複数回言及し、タイトルのキーワードが説明に含まれるようにする
+- 重要：説明文でアーティスト「${artist}」を言及する
+- 重要：説明文で音楽スタイル「${musicStyles.join(', ')}」を言及する
 
 完全な説明文を生成してください。`
     } else {
@@ -366,12 +366,12 @@ Please generate a complete YouTube description including:
 
 Format requirements:
 - Use emojis for visual appeal
-- Include appropriate tags
+- Include appropriate tags (use # tags directly in content, do not use section headers like "**# Related Tags:**")
 - Encourage subscription and interaction
 - Moderate length (200-400 words)
-- **IMPORTANT: Must mention the song name "${songName}" multiple times in the description to ensure title keywords appear in description**
-- **IMPORTANT: Must mention the artist "${artist}" in the description**
-- **IMPORTANT: Must mention the music styles "${musicStyles.join(', ')}" in the description**
+- IMPORTANT: Must mention the song name "${songName}" multiple times in the description to ensure title keywords appear in description
+- IMPORTANT: Must mention the artist "${artist}" in the description
+- IMPORTANT: Must mention the music styles "${musicStyles.join(', ')}" in the description
 
 Please generate the complete description text.`
     }
