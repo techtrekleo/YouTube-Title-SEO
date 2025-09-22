@@ -276,14 +276,28 @@ function App() {
             
             {/* 抖內按鈕 */}
             <div className="mt-6 flex justify-center">
+              <p className="text-gray-400 mb-3">喜歡我的工具嗎？請我喝杯咖啡吧！</p>
               <a
-                href="https://www.paypal.com/ncp/payment/PK49RJYSTAV6Y"
+                href="https://buymeacoffee.com/sonicpulse2025"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 bg-gradient-to-r from-pink-500 to-purple-600 hover:from-pink-600 hover:to-purple-700 text-white px-6 py-3 rounded-full font-medium transition-all duration-200 transform hover:scale-105 shadow-lg hover:shadow-xl"
+                className="inline-flex items-center gap-3 bg-gradient-to-r from-pink-500 to-teal-400 hover:from-pink-600 hover:to-teal-500 text-white px-8 py-4 rounded-2xl font-medium transition-all duration-300 transform hover:scale-105 shadow-lg hover:shadow-xl border border-white/20 relative overflow-hidden"
+                style={{
+                  background: 'linear-gradient(135deg, #ff6b9d 0%, #4ecdc4 100%)',
+                  fontFamily: 'Poppins, sans-serif',
+                  backdropFilter: 'blur(10px)'
+                }}
               >
-                <span className="text-xl">🐱</span>
-                <span>抖內支持開發者</span>
+                <img 
+                  src="/assets/cat-avatar.png" 
+                  alt="口袋裡的貓" 
+                  className="w-8 h-8 rounded-full"
+                  style={{ width: '2rem', height: '2rem' }}
+                />
+                <div className="flex flex-col items-start">
+                  <span className="text-lg font-semibold">贊助口袋裡的貓</span>
+                  <span className="text-sm opacity-80">Buy me a coffee</span>
+                </div>
               </a>
             </div>
           </div>
