@@ -275,8 +275,8 @@ function App() {
             </p>
             
             {/* 抖內按鈕 */}
-            <div className="mt-6 flex justify-center">
-              <p className="text-gray-400 mb-3">喜歡我的工具嗎？請我喝杯咖啡吧！</p>
+            <div className="mt-6 flex flex-col items-center gap-3">
+              <p className="text-gray-400">喜歡我的工具嗎？請我喝杯咖啡吧！</p>
               <a
                 href="https://buymeacoffee.com/sonicpulse2025"
                 target="_blank"
